@@ -68,6 +68,7 @@ message ListProductsResponse {
 message UpdateInventoryRequest {
     int64 productId = 1;
     int32 quantity = 2; // Quantity to add or subtract
+    int64 version = 3;
 }
 
 message GetInventoryRequest {
