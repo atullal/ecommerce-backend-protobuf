@@ -9,6 +9,7 @@ service ProductService {
     rpc DeleteProduct(DeleteProductRequest) returns (DeleteProductResponse);
     rpc ListProducts(ListProductsRequest) returns (ListProductsResponse);
     rpc UpdateInventory(UpdateInventoryRequest) returns (InventoryResponse);
+    rpc UpdateMultipleInventories(UpdateMultipleInventoriesRequest) returns (InventoriesResponse);
     rpc GetInventory(GetInventoryRequest) returns (InventoryResponse);
 }
 
@@ -67,8 +68,12 @@ message ListProductsResponse {
 
 message UpdateInventoryRequest {
     int64 productId = 1;
-    int32 quantity = 2; // Quantity to add or subtract
+    int32 quantityChange = 2; // Quantity to add or subtract
     int64 version = 3;
+}
+
+message UpdateMultipleInventoriesRequest {
+    repeated UpdateInventoryRequest inventoryUpdates = 1;
 }
 
 message GetInventoryRequest {
@@ -79,6 +84,10 @@ message InventoryResponse {
     int64 productId = 1;
     int32 quantity = 2;
     int64 version = 3;
+}
+
+message InventoriesResponse {
+    repeated InventoryResponse inventories = 1;
 }
 
 message ProductResponse {

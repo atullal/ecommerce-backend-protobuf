@@ -19,13 +19,14 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	ProductService_AddProduct_FullMethodName      = "/product.ProductService/AddProduct"
-	ProductService_GetProduct_FullMethodName      = "/product.ProductService/GetProduct"
-	ProductService_UpdateProduct_FullMethodName   = "/product.ProductService/UpdateProduct"
-	ProductService_DeleteProduct_FullMethodName   = "/product.ProductService/DeleteProduct"
-	ProductService_ListProducts_FullMethodName    = "/product.ProductService/ListProducts"
-	ProductService_UpdateInventory_FullMethodName = "/product.ProductService/UpdateInventory"
-	ProductService_GetInventory_FullMethodName    = "/product.ProductService/GetInventory"
+	ProductService_AddProduct_FullMethodName                = "/product.ProductService/AddProduct"
+	ProductService_GetProduct_FullMethodName                = "/product.ProductService/GetProduct"
+	ProductService_UpdateProduct_FullMethodName             = "/product.ProductService/UpdateProduct"
+	ProductService_DeleteProduct_FullMethodName             = "/product.ProductService/DeleteProduct"
+	ProductService_ListProducts_FullMethodName              = "/product.ProductService/ListProducts"
+	ProductService_UpdateInventory_FullMethodName           = "/product.ProductService/UpdateInventory"
+	ProductService_UpdateMultipleInventories_FullMethodName = "/product.ProductService/UpdateMultipleInventories"
+	ProductService_GetInventory_FullMethodName              = "/product.ProductService/GetInventory"
 )
 
 // ProductServiceClient is the client API for ProductService service.
@@ -38,6 +39,7 @@ type ProductServiceClient interface {
 	DeleteProduct(ctx context.Context, in *DeleteProductRequest, opts ...grpc.CallOption) (*DeleteProductResponse, error)
 	ListProducts(ctx context.Context, in *ListProductsRequest, opts ...grpc.CallOption) (*ListProductsResponse, error)
 	UpdateInventory(ctx context.Context, in *UpdateInventoryRequest, opts ...grpc.CallOption) (*InventoryResponse, error)
+	UpdateMultipleInventories(ctx context.Context, in *UpdateMultipleInventoriesRequest, opts ...grpc.CallOption) (*InventoriesResponse, error)
 	GetInventory(ctx context.Context, in *GetInventoryRequest, opts ...grpc.CallOption) (*InventoryResponse, error)
 }
 
@@ -103,6 +105,15 @@ func (c *productServiceClient) UpdateInventory(ctx context.Context, in *UpdateIn
 	return out, nil
 }
 
+func (c *productServiceClient) UpdateMultipleInventories(ctx context.Context, in *UpdateMultipleInventoriesRequest, opts ...grpc.CallOption) (*InventoriesResponse, error) {
+	out := new(InventoriesResponse)
+	err := c.cc.Invoke(ctx, ProductService_UpdateMultipleInventories_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *productServiceClient) GetInventory(ctx context.Context, in *GetInventoryRequest, opts ...grpc.CallOption) (*InventoryResponse, error) {
 	out := new(InventoryResponse)
 	err := c.cc.Invoke(ctx, ProductService_GetInventory_FullMethodName, in, out, opts...)
@@ -122,6 +133,7 @@ type ProductServiceServer interface {
 	DeleteProduct(context.Context, *DeleteProductRequest) (*DeleteProductResponse, error)
 	ListProducts(context.Context, *ListProductsRequest) (*ListProductsResponse, error)
 	UpdateInventory(context.Context, *UpdateInventoryRequest) (*InventoryResponse, error)
+	UpdateMultipleInventories(context.Context, *UpdateMultipleInventoriesRequest) (*InventoriesResponse, error)
 	GetInventory(context.Context, *GetInventoryRequest) (*InventoryResponse, error)
 	mustEmbedUnimplementedProductServiceServer()
 }
@@ -147,6 +159,9 @@ func (UnimplementedProductServiceServer) ListProducts(context.Context, *ListProd
 }
 func (UnimplementedProductServiceServer) UpdateInventory(context.Context, *UpdateInventoryRequest) (*InventoryResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateInventory not implemented")
+}
+func (UnimplementedProductServiceServer) UpdateMultipleInventories(context.Context, *UpdateMultipleInventoriesRequest) (*InventoriesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateMultipleInventories not implemented")
 }
 func (UnimplementedProductServiceServer) GetInventory(context.Context, *GetInventoryRequest) (*InventoryResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetInventory not implemented")
@@ -272,6 +287,24 @@ func _ProductService_UpdateInventory_Handler(srv interface{}, ctx context.Contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ProductService_UpdateMultipleInventories_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateMultipleInventoriesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductServiceServer).UpdateMultipleInventories(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ProductService_UpdateMultipleInventories_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductServiceServer).UpdateMultipleInventories(ctx, req.(*UpdateMultipleInventoriesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _ProductService_GetInventory_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetInventoryRequest)
 	if err := dec(in); err != nil {
@@ -320,6 +353,10 @@ var ProductService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateInventory",
 			Handler:    _ProductService_UpdateInventory_Handler,
+		},
+		{
+			MethodName: "UpdateMultipleInventories",
+			Handler:    _ProductService_UpdateMultipleInventories_Handler,
 		},
 		{
 			MethodName: "GetInventory",
