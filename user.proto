@@ -27,8 +27,8 @@ message AuthenticateUserRequest {
 
 // Response message containing user details
 message UserResponse {
-  string id = 1;
-  string username = 2;
-  string email = 3;
-  // Additional fields like token, etc.
+    string id = 1;
+    string username = 2;
+    string email = 3;
+    string token = 4; // JWT token
 }
