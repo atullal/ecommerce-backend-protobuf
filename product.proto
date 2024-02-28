@@ -18,7 +18,7 @@ message Product {
     string description = 3;
     float price = 4;
     int32 quantity = 5; // Inventory quantity
-    // Additional product fields...
+    int64 version = 6;  // Version number for optimistic locking
 }
 
 message AddProductRequest {
@@ -37,6 +37,7 @@ message UpdateProductRequest {
     string name = 2;
     string description = 3;
     float price = 4;
+    int64 version = 5;
     // Not including quantity here as it should be managed via inventory updates
 }
 
