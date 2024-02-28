@@ -1,0 +1,83 @@
+syntax = "proto3";
+
+package product;
+option go_package = "/product";
+service ProductService {
+    rpc AddProduct(AddProductRequest) returns (ProductResponse);
+    rpc GetProduct(GetProductRequest) returns (ProductResponse);
+    rpc UpdateProduct(UpdateProductRequest) returns (ProductResponse);
+    rpc DeleteProduct(DeleteProductRequest) returns (DeleteProductResponse);
+    rpc ListProducts(ListProductsRequest) returns (ListProductsResponse);
+    rpc UpdateInventory(UpdateInventoryRequest) returns (InventoryResponse);
+    rpc GetInventory(GetInventoryRequest) returns (InventoryResponse);
+}
+
+message Product {
+    int64 id = 1;
+    string name = 2;
+    string description = 3;
+    float price = 4;
+    int32 quantity = 5; // Inventory quantity
+    // Additional product fields...
+}
+
+message AddProductRequest {
+    string name = 1;
+    string description = 2;
+    float price = 3;
+    int32 quantity = 4;
+}
+
+message GetProductRequest {
+    int64 id = 1;
+}
+
+message UpdateProductRequest {
+    int64 id = 1;
+    string name = 2;
+    string description = 3;
+    float price = 4;
+    // Not including quantity here as it should be managed via inventory updates
+}
+
+message DeleteProductRequest {
+    int64 id = 1;
+}
+
+message DeleteProductResponse {
+    bool success = 1;
+}
+
+message ListProductsRequest {
+    int32 page = 1;                 // The page number of the product listing
+    int32 pageSize = 2;             // The number of products per page
+    string searchKeyword = 3;       // Optional search keyword for filtering
+    repeated string categories = 4; // Optional categories for filtering
+    // Additional filters like price range, ratings, etc., can be added here
+}
+
+message ListProductsResponse {
+    repeated Product products = 1; // List of products
+    int32 totalPages = 2;          // Total number of pages available
+    int32 currentPage = 3;         // The current page number
+    // Additional metadata like total number of products can be included
+}
+
+
+message UpdateInventoryRequest {
+    int64 productId = 1;
+    int32 quantity = 2; // Quantity to add or subtract
+}
+
+message GetInventoryRequest {
+    int64 productId = 1;
+}
+
+message InventoryResponse {
+    int64 productId = 1;
+    int32 quantity = 2;
+}
+
+message ProductResponse {
+    Product product = 1;
+}
