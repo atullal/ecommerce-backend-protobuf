@@ -1,0 +1,74 @@
+syntax = "proto3";
+
+package order;
+
+option go_package = "/order";
+
+// The order service definition.
+service OrderService {
+    rpc CreateOrder(CreateOrderRequest) returns (OrderResponse);
+    rpc GetOrder(GetOrderRequest) returns (OrderResponse);
+    rpc UpdateOrder(UpdateOrderRequest) returns (OrderResponse);
+    rpc ListOrders(ListOrdersRequest) returns (ListOrdersResponse);
+}
+
+// Request to create a new order
+message CreateOrderRequest {
+    // Fields for creating an order
+    repeated OrderItem items = 1;
+    int64 customerId = 2;
+    // Additional fields such as payment details, shipping address, etc.
+}
+
+// Request to get an existing order
+message GetOrderRequest {
+    int64 orderId = 1;
+}
+
+// Request to update an existing order
+message UpdateOrderRequest {
+    int64 orderId = 1;
+    OrderStatus status = 2;
+    // Additional fields as needed
+}
+
+// Request to list orders
+message ListOrdersRequest {
+    int64 customerId = 1;
+    // Additional fields for pagination, filtering, etc.
+}
+
+// Response message containing order details
+message OrderResponse {
+    Order order = 1;
+}
+
+// Response message for listing orders
+message ListOrdersResponse {
+    repeated Order orders = 1;
+}
+
+// Order representation
+message Order {
+    int64 id = 1;
+    int64 customerId = 2;
+    repeated OrderItem items = 3;
+    OrderStatus status = 4;
+    // Additional fields such as timestamps, total price, shipping address, etc.
+}
+
+// Order item representation
+message OrderItem {
+    int64 productId = 1;
+    int32 quantity = 2;
+    // Additional fields such as individual price, item details, etc.
+}
+
+// Enum for order status
+enum OrderStatus {
+    PENDING = 0;
+    CONFIRMED = 1;
+    SHIPPED = 2;
+    DELIVERED = 3;
+    CANCELLED = 4;
+}
