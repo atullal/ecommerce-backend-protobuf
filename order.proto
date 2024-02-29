@@ -54,6 +54,7 @@ message Order {
     int64 customerId = 2;
     repeated OrderItem items = 3;
     OrderStatus status = 4;
+    string shippingAddress = 5;
     // Additional fields such as timestamps, total price, shipping address, etc.
 }
 
@@ -61,6 +62,8 @@ message Order {
 message OrderItem {
     int64 productId = 1;
     int32 quantity = 2;
+    int64 version = 3;
+    int64 price = 4;
     // Additional fields such as individual price, item details, etc.
 }
 
