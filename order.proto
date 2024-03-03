@@ -23,6 +23,7 @@ message CreateOrderRequest {
 // Request to get an existing order
 message GetOrderRequest {
     int64 orderId = 1;
+    int64 customerId = 2;
 }
 
 // Request to update an existing order
